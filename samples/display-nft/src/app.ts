@@ -4,10 +4,6 @@
  */
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
-import Web3 from 'web3';
-import {NftCollectionContractService} from "../services/nft-collection-contract-service";
-
-let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 
 /**
  * The main class of this app. All the logic goes here.
@@ -15,7 +11,7 @@ let web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 export default class HelloWorld {
 
 	private imageURL: string = 
-	"https://upload.wikimedia.org/wikipedia/commons/0/05/Alexander_Hamilton_portrait_by_John_Trumbull_1806.jpg";
+	"https://ipfs.io/ipfs/bafkreick2sgg5bzlb3eq7zeudykprw25r3siwoq7mjyilnmkqu52kork5y?filename=Dimepiece.jpg";
 
 	private text: MRE.Actor = null;
 	private cube: MRE.Actor = null;
@@ -73,7 +69,7 @@ export default class HelloWorld {
 					app: { position: { x: 0, y: 1, z: 0 } }
 				},
 				text: {
-					contents: this.imageURL,
+					contents: "Dimepiece",
 					anchor: MRE.TextAnchorLocation.MiddleCenter,
 					color: { r: 255 / 255, g: 255 / 255, b: 255 / 255 },
 					height: 0.1
@@ -128,10 +124,4 @@ export default class HelloWorld {
 				value: MRE.Quaternion.RotationAxis(axis, 2 * Math.PI)
 			}];
 		}
-
-		function getImageURL(tokenId: string|number): string {
-			const tokenURI = (await contract.methods.tokenURI(tokenId).call()).replace("ipfs://", "https://ipfs.io/ipfs/");
-			const { image } = (await fetch(tokenURI).then(res => res.json)) as any;
-			return image as string;
-		  }
 }
