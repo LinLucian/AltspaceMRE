@@ -5,17 +5,20 @@
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 
+const _importDynamic = new Function('modulePath', 'return import(modulePath)')
+async function fetch(...args: string[]) {
+	const { default: fetch } = await _importDynamic('node-fetch');
+	return fetch(...args);
+}
 /**
  * The main class of this app. All the logic goes here.
  */
 export default class HelloWorld {
 
-	private imageURL: string = 
-	"https://ipfs.io/ipfs/bafkreick2sgg5bzlb3eq7zeudykprw25r3siwoq7mjyilnmkqu52kork5y?filename=Dimepiece.jpg";
-
 	private text: MRE.Actor = null;
 	private cube: MRE.Actor = null;
 	private assets: MRE.AssetContainer;
+	private response: string;
 
 	constructor(private context: MRE.Context) {
 		this.context.onStarted(() => this.started());
@@ -27,12 +30,13 @@ export default class HelloWorld {
 	private async started() {
 		// set up somewhere to store loaded assets (meshes, textures, animations, gltfs, etc.)
 		this.assets = new MRE.AssetContainer(this.context);
-		const image = this.assets.createTexture("image", {uri: this.imageURL});
-
-		const imageTexture = this.assets.createTexture("picture",{
-			uri: this.imageURL
+		await fetch("http://10.180.36.185:4002/?contractAddress=0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D&tokenId=5673").then(async res => { this.response = await res.text(); })
+		console.log(this.response);
+		
+		const imageTexture = this.assets.createTexture("picture", {
+			uri: this.response
 		});
-	
+
 		const imageMaterial = this.assets.createMaterial("pictureMat", {
 			alphaMode: MRE.AlphaMode.Mask,
 			mainTextureId: imageTexture.id,
@@ -69,7 +73,7 @@ export default class HelloWorld {
 					app: { position: { x: 0, y: 1, z: 0 } }
 				},
 				text: {
-					contents: "Dimepiece",
+					contents: "Your NFT",
 					anchor: MRE.TextAnchorLocation.MiddleCenter,
 					color: { r: 255 / 255, g: 255 / 255, b: 255 / 255 },
 					height: 0.1
@@ -106,22 +110,22 @@ export default class HelloWorld {
 	 * @param duration The length of time in seconds it takes to complete a full revolution.
 	 * @param axis The axis of rotation in local space.
 	 */
-		 private generateSpinKeyframes(duration: number, axis: MRE.Vector3): Array<MRE.Keyframe<MRE.Quaternion>> {
-			return [{
-				time: 0 * duration,
-				value: MRE.Quaternion.RotationAxis(axis, 0)
-			}, {
-				time: 0.25 * duration,
-				value: MRE.Quaternion.RotationAxis(axis, Math.PI / 2)
-			}, {
-				time: 0.5 * duration,
-				value: MRE.Quaternion.RotationAxis(axis, Math.PI)
-			}, {
-				time: 0.75 * duration,
-				value: MRE.Quaternion.RotationAxis(axis, 3 * Math.PI / 2)
-			}, {
-				time: 1 * duration,
-				value: MRE.Quaternion.RotationAxis(axis, 2 * Math.PI)
-			}];
-		}
+	private generateSpinKeyframes(duration: number, axis: MRE.Vector3): Array<MRE.Keyframe<MRE.Quaternion>> {
+		return [{
+			time: 0 * duration,
+			value: MRE.Quaternion.RotationAxis(axis, 0)
+		}, {
+			time: 0.25 * duration,
+			value: MRE.Quaternion.RotationAxis(axis, Math.PI / 2)
+		}, {
+			time: 0.5 * duration,
+			value: MRE.Quaternion.RotationAxis(axis, Math.PI)
+		}, {
+			time: 0.75 * duration,
+			value: MRE.Quaternion.RotationAxis(axis, 3 * Math.PI / 2)
+		}, {
+			time: 1 * duration,
+			value: MRE.Quaternion.RotationAxis(axis, 2 * Math.PI)
+		}];
+	}
 }
