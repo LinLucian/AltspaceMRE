@@ -41,7 +41,7 @@ module.exports = {
 		],
 		"linebreak-style": [
 			"warn",
-			"windows"
+			"unix"
 		],
 		"max-classes-per-file": ["warn", 1],
 		"max-len": ["warn", 120],
@@ -60,7 +60,7 @@ module.exports = {
 		"no-warning-comments": ["warn", {"terms": ["todo", "fixme", "tslint"]}],
 		"prefer-const": "warn",
 		"prefer-regex-literals": "warn",
-		"require-unicode-regexp": "error",
+		"require-unicode-regexp": "warn",
 		"yoda": "warn",
 
 		"@typescript-eslint/array-type": [

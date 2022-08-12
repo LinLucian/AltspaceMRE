@@ -5,7 +5,7 @@
 
 import * as MRE from '@microsoft/mixed-reality-extension-sdk';
 import dotenv from 'dotenv';
-import { resolve as resolvePath } from 'path';
+import {resolve as resolvePath} from 'path';
 import App from './app';
 
 // add some generic error handlers here, to log any exceptions we're not expecting
@@ -26,7 +26,7 @@ function runApp() {
 	});
 
 	// Handle new application sessions
-	server.adapter.onConnection(context => new App(context));
+	server.adapter.onConnection((context: MRE.Context, params: MRE.ParameterSet) => new App(context, params));
 }
 
 // Check whether code is running in a debuggable watched filesystem
